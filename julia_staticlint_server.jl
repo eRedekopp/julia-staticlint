@@ -1,6 +1,6 @@
 using StaticLint
 using StaticLint: quoted, unquoted, should_mark_missing_getfield_ref, hasref,
-    parentof, is_in_fexpr, errorof, haserror
+    parentof, is_in_fexpr, errorof, haserror, ExternalEnv
 
 using CSTParser
 using CSTParser: EXPR, headof, isidentifier, isnonstdid, valof, iscall
@@ -164,7 +164,7 @@ function lint_collect_hints(x::EXPR,
         end
     elseif (isquoted &&
             missingrefs == :all &&
-            should_mark_missing_getfield_ref(x, server))
+            should_mark_missing_getfield_ref(x, server.external_env))
         push!(errs, (ErrorSpan(pos, pos+x.span), x))
     end
 
@@ -251,7 +251,7 @@ function lint_file(rootfile::String,
     hints = Dict()
     slopts = SL.LintOptions(:)
     for (path, file) in server.files
-        SL.check_all(file.cst, slopts, server)
+        SL.check_all(file.cst, slopts, server.external_env)
         hints[path],_ = lint_collect_hints(file.cst, server)
     end
 
@@ -305,8 +305,9 @@ env = dirname(SS.Pkg.Types.Context().env.project_file)
 # Setup server
 server = SL.FileServer()
 ssi = SymbolServerInstance(depot, cache)
-_, server.symbolserver = SS.getstore(ssi, env)
-server.symbol_extends  = SS.collect_extended_methods(server.symbolserver)
+_, symbols = SS.getstore(ssi, env)
+extended_methods  = SS.collect_extended_methods(symbols)
+server.external_env = ExternalEnv(symbols, extended_methods, Symbol[])
 
 @info print_time()*"Started server"
 
