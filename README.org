@@ -1,5 +1,9 @@
 * julia-staticlint
 
+This repository is a fork of dmalyuta/julia-staticlint which is no
+longer supported, with minimal changes made to support newer versions
+of StaticLint and SymbolServer.
+
 This simple package provides static code linting of Julia ~julia-mode~ language
 buffers through the [[https://github.com/julia-vscode/StaticLint.jl][StaticLint.jl]] backend. The static linting is done by a
 background process, which sends errors over a TCP connection to Flycheck for
@@ -9,11 +13,11 @@ display in the Emacs buffer. The result looks like this:
 
 This code was tested with the following setup:
 
-- OS: Ubuntu 20.04.1 LTS
-- Emacs: 27.1.9
-- Julia: 1.5.3
-  - StaticLint: v7.0.0
-  - SymbolServer: v6.0.1
+- OS: Manjaro Linux, kernel 5.1.19
+- Emacs: 28.2
+- Julia: 1.9.2
+  - StaticLint: v8.1.0
+  - SymbolServer: v7.2.1
 
 In order to make this code run for your Emacs setup, include the following in
 your ~init.el~ (using [[https://github.com/jwiegley/use-package][use-package]] and [[https://github.com/quelpa/quelpa][quelpa]]):
@@ -24,9 +28,9 @@ your ~init.el~ (using [[https://github.com/jwiegley/use-package][use-package]] a
     ;; Emacs Flycheck support for StaticLint.jl
     :ensure nil
     :quelpa ((julia-staticlint :fetcher github
-			       :repo "dmalyuta/julia-staticlint"
-			       :files (:defaults "julia_staticlint_server.jl"
-						 "julia_staticlint_client.jl")))
+                   :repo "eRedekopp/julia-staticlint"
+                   :files (:defaults "julia_staticlint_server.jl"
+                         "julia_staticlint_client.jl")))
     :hook ((julia-mode . julia-staticlint-activate))
     :config
     (julia-staticlint-init))
