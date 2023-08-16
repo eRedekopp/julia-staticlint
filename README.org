@@ -2,7 +2,9 @@
 
 This repository is a fork of dmalyuta/julia-staticlint which is no
 longer supported, with minimal changes made to support newer versions
-of StaticLint and SymbolServer.
+of StaticLint and SymbolServer. NOTE: I have switched to eglot-jl 
+which serves my needs much more effectively. I will likely not continue 
+maintaining this fork.
 
 This simple package provides static code linting of Julia ~julia-mode~ language
 buffers through the [[https://github.com/julia-vscode/StaticLint.jl][StaticLint.jl]] backend. The static linting is done by a
